@@ -1,0 +1,32 @@
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+error_log
+
+# Temporary files
+*.tmp
+*.temp
+
+# Database backups
+*.sql.bak
+*.dump
+
+# Configuration files with sensitive data
+config_local.php
+
+# Uploaded files
+uploads/
+temp/
+
+# Cache
+cache/
+*.cache
