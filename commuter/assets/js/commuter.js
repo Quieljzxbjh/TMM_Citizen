@@ -44,11 +44,11 @@ function loadAnnouncements() {
         .then(response => response.json())
         .then(data => {
             const announcementsDiv = document.getElementById('announcements');
-            if (data.length > 0) {
+            if (data.success && data.data.length > 0) {
                 let html = '';
-                data.slice(0, 3).forEach(announcement => {
-                    const priorityClass = announcement.priority === 'High' ? 'priority-high' : 'priority-normal';
-                    const categoryClass = announcement.category === 'Emergency' ? 'emergency' : 'advisory';
+                data.data.slice(0, 3).forEach(announcement => {
+                    const priorityClass = getPriorityClass(announcement.priority);
+                    const categoryClass = announcement.priority === 'urgent' ? 'emergency' : 'advisory';
                     
                     html += `
                         <div class="announcement-item ${categoryClass} mb-3">
@@ -56,8 +56,8 @@ function loadAnnouncements() {
                                 <h6 class="mb-0">${announcement.title}</h6>
                                 <span class="announcement-priority ${priorityClass}">${announcement.priority}</span>
                             </div>
-                            <p class="small mb-1">${announcement.message}</p>
-                            <small class="text-muted">${new Date(announcement.published_date).toLocaleDateString()}</small>
+                            <p class="small mb-1">${announcement.content.substring(0, 100)}${announcement.content.length > 100 ? '...' : ''}</p>
+                            <small class="text-muted">${new Date(announcement.created_at).toLocaleDateString()}</small>
                         </div>
                     `;
                 });
@@ -70,4 +70,14 @@ function loadAnnouncements() {
             console.error('Error loading announcements:', error);
             document.getElementById('announcements').innerHTML = '<p class="text-danger">Error loading announcements</p>';
         });
+}
+
+function getPriorityClass(priority) {
+    switch(priority) {
+        case 'urgent':
+        case 'high':
+            return 'priority-high';
+        default:
+            return 'priority-normal';
+    }
 }

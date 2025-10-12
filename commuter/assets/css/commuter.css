@@ -1,14 +1,14 @@
 /* Commuter Portal Styles */
 :root {
-    --primary-color: #059669;
-    --primary-light: #10b981;
-    --primary-dark: #047857;
-    --secondary-color: #64748b;
-    --success-color: #10b981;
-    --warning-color: #f59e0b;
+    --primary-color: #4CAF50;
+    --primary-light: #66BB6A;
+    --primary-dark: #388E3C;
+    --secondary-color: #4A90E2;
+    --success-color: #4CAF50;
+    --warning-color: #FDA811;
     --danger-color: #ef4444;
-    --info-color: #0ea5e9;
-    --light-color: #f8fafc;
+    --info-color: #4A90E2;
+    --light-color: #FBFBFB;
     --dark-color: #1e293b;
     --border-radius: 12px;
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -25,6 +25,7 @@ body {
     font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
     line-height: 1.6;
     color: var(--dark-color);
+    background-color: var(--light-color);
 }
 
 /* Hero Section */
@@ -148,6 +149,28 @@ body {
 
 .btn-outline-info:hover {
     background: var(--info-color);
+    color: white;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--warning-color), #FFB74D);
+    border: none;
+    color: white;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #FF8F00, var(--warning-color));
+    transform: translateY(-2px);
+    color: white;
+}
+
+.btn-outline-warning {
+    border: 2px solid var(--warning-color);
+    color: var(--warning-color);
+}
+
+.btn-outline-warning:hover {
+    background: var(--warning-color);
     color: white;
 }
 
@@ -319,8 +342,18 @@ body {
 }
 
 .priority-normal {
-    background: rgba(37, 99, 235, 0.1);
-    color: var(--primary-color);
+    background: rgba(74, 144, 226, 0.1);
+    color: var(--secondary-color);
+}
+
+.announcement-item.emergency {
+    border-left-color: var(--danger-color);
+    background: rgba(239, 68, 68, 0.02);
+}
+
+.announcement-item.advisory {
+    border-left-color: var(--warning-color);
+    background: rgba(253, 168, 17, 0.02);
 }
 
 /* Loading States */
