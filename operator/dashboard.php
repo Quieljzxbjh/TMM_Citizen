@@ -115,6 +115,42 @@
     function doLogout() {
         window.location.href = '../gsm_login/Login/logout.php';
     }
+    
+    function showVerificationModal() {
+        var verificationModal = new bootstrap.Modal(document.getElementById('verificationModal'));
+        verificationModal.show();
+    }
+    
+    // Handle verification form submission
+    document.getElementById('verificationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData();
+        formData.append('full_name', document.getElementById('fullName').value);
+        formData.append('phone', document.getElementById('phone').value);
+        formData.append('address', document.getElementById('address').value);
+        formData.append('license_number', document.getElementById('licenseNumber').value);
+        formData.append('documents', document.getElementById('documents').files[0]);
+        
+        fetch('api/submit_verification.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Verification request submitted successfully! You will be notified once reviewed.');
+                bootstrap.Modal.getInstance(document.getElementById('verificationModal')).hide();
+                document.getElementById('verificationForm').reset();
+            } else {
+                alert('Error: ' + (data.error || 'Unknown error'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error submitting verification request');
+        });
+    });
     </script>
 
     <!-- Profile Modal -->
@@ -171,6 +207,59 @@
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger" onclick="doLogout()">Yes, Logout</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Verification Modal -->
+    <div class="modal fade" id="verificationModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-shield-alt me-2"></i>Account Verification</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="verificationForm" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Complete your account verification to access all operator features and build trust with commuters.
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Full Name *</label>
+                                <input type="text" class="form-control" id="fullName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Phone Number *</label>
+                                <input type="tel" class="form-control" id="phone" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Address *</label>
+                            <textarea class="form-control" id="address" rows="2" required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Driver's License Number</label>
+                            <input type="text" class="form-control" id="licenseNumber">
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Upload Documents *</label>
+                            <input type="file" class="form-control" id="documents" accept=".pdf,.jpg,.jpeg,.png" required>
+                            <div class="form-text">Upload driver's license, certificates, or other verification documents (PDF, JPG, PNG)</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Verification
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

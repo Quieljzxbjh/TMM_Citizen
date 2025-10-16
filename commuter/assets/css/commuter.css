@@ -328,6 +328,51 @@ footer {
     color: #ffc107;
 }
 
+/* Feedback Display */
+#feedbackList {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+#feedbackList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#feedbackList::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+#feedbackList::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.feedback-item {
+    transition: var(--transition);
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.feedback-item:hover {
+    background-color: rgba(76, 175, 80, 0.05);
+}
+
+.feedback-stars {
+    color: #ffc107;
+    font-size: 1.2rem;
+}
+
+.feedback-date {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.feedback-rating-badge {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
 /* Announcements */
 .announcement-item {
     background: white;
@@ -399,6 +444,18 @@ footer {
     100% { transform: rotate(360deg); }
 }
 
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #6b7280;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero-section {
@@ -426,5 +483,13 @@ footer {
     .btn-lg {
         padding: 10px 20px;
         font-size: 1rem;
+    }
+    
+    #feedbackList {
+        max-height: 300px;
+    }
+    
+    .feedback-item {
+        padding: 0.75rem;
     }
 }

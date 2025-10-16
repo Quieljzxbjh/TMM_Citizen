@@ -58,6 +58,10 @@ document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             alert('Thank you for your feedback!');
             document.getElementById('feedbackForm').reset();
             document.querySelectorAll('.rating-stars .star').forEach(s => s.classList.remove('active'));
+            // Refresh feedback display
+            if (typeof loadFeedback === 'function') {
+                loadFeedback();
+            }
         } else {
             alert('Error: ' + (data.error || 'Unknown error'));
         }

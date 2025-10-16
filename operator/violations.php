@@ -14,6 +14,8 @@
     <?php
     include '../includes/config.php';
     include '../includes/header.php';
+    
+    $isVerified = isset($_SESSION['user_id']) ? isOperatorVerified($_SESSION['user_id']) : false;
     ?>
 
     <div class="container-fluid">
@@ -25,6 +27,9 @@
                     <h1 class="h2">Violations</h1>
                 </div>
 
+                <?php if (!$isVerified): ?>
+                    <?php echo getVerificationMessage(); ?>
+                <?php else: ?>
                 <!-- Violations Table -->
                 <div class="card mb-4">
                     <div class="card-header">
@@ -51,7 +56,9 @@
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
 
+                <?php if ($isVerified): ?>
                 <!-- File Complaint Modal -->
                 <div class="modal fade" id="complaintModal" tabindex="-1">
                     <div class="modal-dialog">
@@ -76,6 +83,7 @@
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
             </main>
         </div>
     </div>

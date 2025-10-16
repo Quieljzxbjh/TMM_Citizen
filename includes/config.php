@@ -133,6 +133,24 @@ try {
         )
     ");
 
+    // Create account_verification_requests table
+    $temp_db->exec("
+        CREATE TABLE IF NOT EXISTS account_verification_requests (
+            verification_id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT NOT NULL,
+            full_name VARCHAR(255) NOT NULL,
+            phone VARCHAR(20),
+            address TEXT,
+            license_number VARCHAR(50),
+            document_path VARCHAR(255),
+            status ENUM('Pending', 'Approved', 'Rejected') DEFAULT 'Pending',
+            admin_notes TEXT,
+            submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            reviewed_at TIMESTAMP NULL,
+            reviewed_by INT NULL
+        )
+    ");
+
     // Insert sample operator profile if none exists
     $stmt = $temp_db->query("SELECT COUNT(*) FROM operator_profiles");
     if ($stmt->fetchColumn() == 0) {
@@ -142,8 +160,29 @@ try {
         ");
     }
 
+    // Create users table if it doesn't exist (for login system)
+    $temp_db->exec("
+        CREATE TABLE IF NOT EXISTS users (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            password_hash VARCHAR(255) NOT NULL,
+            first_name VARCHAR(100) NOT NULL,
+            last_name VARCHAR(100) NOT NULL,
+            role ENUM('administrator', 'operator', 'commuter') NOT NULL,
+            status ENUM('active', 'inactive') DEFAULT 'active',
+            is_verified BOOLEAN DEFAULT FALSE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ");
+
 } catch(PDOException $e) {
     die("Could not create database: " . $e->getMessage());
+}
+
+// Create uploads directory if it doesn't exist
+$upload_dir = dirname(__DIR__) . '/uploads/verification';
+if (!is_dir($upload_dir)) {
+    mkdir($upload_dir, 0755, true);
 }
 
 $transport_db_host = 'localhost';
@@ -177,4 +216,28 @@ try {
 
 // Session start
 session_start();
+
+// Function to check if operator is verified
+function isOperatorVerified($user_id) {
+    global $citizen_db;
+    try {
+        $stmt = $citizen_db->prepare("SELECT is_verified FROM users WHERE id = ?");
+        $stmt->execute([$user_id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? (bool)$result['is_verified'] : false;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+// Function to get verification status message
+function getVerificationMessage() {
+    return '
+    <div class="alert alert-warning" role="alert">
+        <i class="fas fa-shield-alt me-2"></i>
+        <strong>Account Verification Required</strong><br>
+        You must verify your account to access this feature. Click the "Verify Account" button in the header to submit your verification request.
+    </div>
+    ';
+}
 ?>

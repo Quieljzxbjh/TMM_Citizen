@@ -14,6 +14,8 @@
     <?php
     include '../includes/config.php';
     include '../includes/header.php';
+    
+    $isVerified = isset($_SESSION['user_id']) ? isOperatorVerified($_SESSION['user_id']) : false;
     ?>
 
     <div class="container-fluid">
@@ -23,11 +25,16 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Inspection Scheduling</h1>
+                    <?php if ($isVerified): ?>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#requestInspectionModal">
                         <i class="fas fa-plus"></i> Request Inspection
                     </button>
+                    <?php endif; ?>
                 </div>
 
+                <?php if (!$isVerified): ?>
+                    <?php echo getVerificationMessage(); ?>
+                <?php else: ?>
                 <!-- Pending Requests -->
                 <div class="card mb-4">
                     <div class="card-header">
@@ -76,7 +83,9 @@
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
 
+                <?php if ($isVerified): ?>
                 <!-- Request Inspection Modal -->
                 <div class="modal fade" id="requestInspectionModal" tabindex="-1">
                     <div class="modal-dialog">
@@ -106,6 +115,7 @@
                         </div>
                     </div>
                 </div>
+                <?php endif; ?>
             </main>
         </div>
     </div>
